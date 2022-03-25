@@ -1,0 +1,29 @@
+.button {
+
+    /* Green */
+    border: none;
+    color: #EBE7D9;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 3px 1px 0px 0px;
+    -webkit-transition-duration: 0.4s;
+    /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 25px;
+
+}
+
+.button2 {
+    background-color: #EBE7D9;
+    color: black;
+    border: 1px solid #E9684B;
+}
+
+.button2:hover {
+    background-color: #E9684B;
+    color: #EBE7D9;
+}
