@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Navbar, Nav,Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { House,HouseFill,Chat,ChatFill,People,PeopleFill,PersonCircle } from 'react-bootstrap-icons';
+import { House,HouseFill,Chat,ChatFill,People,PeopleFill,PersonCircle,Search } from 'react-bootstrap-icons';
 
 
 export default function Header(props) {
@@ -50,12 +50,22 @@ export default function Header(props) {
         setChats("");
     }
 
+    const repere={
+        border:'1px solid red'
+    }
+    const recherche={
+        fontSize:'0.99em',
+        cursor:'pointer',
+        marginTop:'5px',
+        marginLeft:'30px'
+    }
     return (
         <div className="header">
 
             <header style={styleheader}  >
                 <Navbar expand="lg" variant="dark" style={stylenavbar} >
-                    <Navbar.Brand>   <center className="ml-2">EMIT</center></Navbar.Brand>
+                    <Navbar.Brand >   <center className="ml-2">EMIT</center></Navbar.Brand>
+                    <Navbar.Brand style={recherche}>   Recherche  <Search color="white" size={30}  className="p-1" /></Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav" >
 

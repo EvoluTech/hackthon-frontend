@@ -74,7 +74,7 @@ function Login() {
                                 </div>
                                 <div class="col-12" style={styleMarginB}>
                                     <div className="p-fluid">
-                                        <div className="p-field p-col-12" style={styleMarginB}>
+                                        <div className="p-field p-col-6" style={styleMarginB}>
                                             <div className="p-inputgroup" >
                                                 <span className="p-inputgroup-addon">
                                                     <i className="pi pi-user" style={{ 'fontSize': '1em' }}></i>
@@ -84,8 +84,8 @@ function Login() {
                                                     <label className="p-text-italic " style={{ color: '#EBE7D9', fontSize: '0.9em' }}>Nom d'utilisateur</label>
                                                 </span>
                                             </div>
-                                        </div>
-                                        <div className="p-field p-col-12" style={styleMarginB}>
+                                        </div> 
+                                        <div className="p-field p-col-6" style={styleMarginB}>
                                             <div className="p-inputgroup" style={{ 'fontSize': '1em' }}>
                                                 <span className="p-inputgroup-addon">
                                                     <i className="pi pi-lock" style={{ 'fontSize': '1em' }}></i>
