@@ -20,10 +20,10 @@
 .button2 {
     background-color: #EBE7D9;
     color: black;
-    border: 1px solid #E9684B;
+    border: 1px solid #3483B5;
 }
 
 .button2:hover {
-    background-color: #E9684B;
-    color: #EBE7D9;
+    background-color: #3483B5;
+    color: white;
 }

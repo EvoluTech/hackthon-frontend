@@ -59,7 +59,7 @@ function Login() {
     return (
         <div style={styleBody}>
             <center>
-                <div style={styleLogin}>
+                <div style={styleLogin} >
                     <div class="grid">
                         <div class="col-12 md:col-6 lg:col-6" style={styleCoteG}>
                             <center style={styleTech}>
