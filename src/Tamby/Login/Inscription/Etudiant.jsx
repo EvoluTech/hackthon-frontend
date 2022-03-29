@@ -25,20 +25,14 @@ function Etudiant() {
         { name: 'M1', code: '4' },
         { name: 'M2', code: '5' }
     ];
+    const [role, setrole] = useState(null)
+    const typeRole = [
+        { name: 'Aucun', code: 'r0' },
+        { name: 'Délégue', code: 'r1' },
+        { name: 'President des étudiants', code: 'r2' }
+    ];
     //Css
-    const styleBody = {
-        // 'backgroundImage': `url(${fondl})`,
-        'height': '103vh',
-        'marginTop': '-23px',
-        'backgroundSize': 'cover',
-        'backgroundRepeat': 'no-repeat',
-    }
-    const styleLogin = {
-        paddingTop: '31vh',
-        width: '400px',
-        height: '103vh',
-        border: '2px solid black',
-    }
+
     const styleInput = {
         border: 'none',
         borderRadius: '0px 25px 25px 0px',
@@ -106,6 +100,16 @@ function Etudiant() {
                     <span className="p-float-label">
                         <Dropdown inputId="dropdown" value={niveau} options={typeNiveau} cla optionLabel="name" onChange={(e) => setniveau(e.value)} style={styleInput} />
                         <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Niveau d'études</label>
+                    </span>
+                </div>
+
+            </div>
+            <div className="p-field p-col-12" style={styleMarginB}>
+                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
+                    <BarChartSteps color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
+                    <span className="p-float-label">
+                        <Dropdown inputId="dropdown" value={role} options={typeRole} cla optionLabel="name" onChange={(e) => setrole(e.value)} style={styleInput} />
+                        <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Rôle en tant qu'étudiant</label>
                     </span>
                 </div>
 

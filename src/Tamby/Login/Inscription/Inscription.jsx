@@ -19,7 +19,7 @@ function Inscription() {
     const styleBody = {
         // 'backgroundImage': `url(${fondl})`,
         'height': '103vh',
-        'marginTop': '-150px',
+        'marginTop': '-190px',
         'backgroundSize': 'cover',
         'backgroundRepeat': 'no-repeat',
     }
@@ -27,7 +27,7 @@ function Inscription() {
         paddingTop: '31vh',
         width: '400px',
         height: '103vh',
-        // border: '2px solid black',
+                // border: '2px solid black',
     }
     const styleInput = {
         border: 'none',
@@ -42,7 +42,9 @@ function Inscription() {
     const styleCoteD = {
         background: '#0F103E',
         boxShadow: ' 8px 10px 20px 5px rgba(0, 0, 255, .2)',
-        opacity: '96%'
+        opacity: '96%',
+        borderRadius:'10px'
+
     }
 
     const styleCConn = {
@@ -97,7 +99,7 @@ function Inscription() {
                                 <div class="col-12">
                                     <div class="grid" style={styleCConn}>
                                         <div class="col-12 pl-4">
-                                            <a href="#" style={{ textDecoration: 'none', color: '#EBE7D9', fontSize: '0.9em', float: 'left' }}>Se connecter</a>
+                                            <a href="/" style={{ textDecoration: 'none', color: '#EBE7D9', fontSize: '0.9em', float: 'left' }}>Se connecter</a>
                                         </div>
                                     </div>
                                 </div>
