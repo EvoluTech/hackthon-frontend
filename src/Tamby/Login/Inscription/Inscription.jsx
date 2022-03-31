@@ -6,15 +6,21 @@ import 'primeflex/primeflex.css';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import Etudiant from './Etudiant'
+import Professeur from './Professeur'
 import { QuestionCircle } from 'react-bootstrap-icons';
 import LoginPoss from '../../image/LoginPoss.png'
+import { Link } from "react-router-dom";
+
+
 function Inscription() {
 
-    const [typeU, settypeU] = useState(null);
+    const [typeU, settypeU] = useState({ name:''});
     const typeUtilisateur = [
-        { name: 'Etudiants', code: 'e' },
-        { name: 'Professeur', code: 'p' }
+        { name: 'Etudiant' },
+        { name: 'Professeur'}
     ];
+    const [donne, setdonne] = useState([]);
+    
     //Css
     const styleBody = {
         // 'backgroundImage': `url(${fondl})`,
@@ -27,7 +33,7 @@ function Inscription() {
         paddingTop: '31vh',
         width: '400px',
         height: '103vh',
-                // border: '2px solid black',
+        // border: '2px solid black',
     }
     const styleInput = {
         border: 'none',
@@ -43,7 +49,7 @@ function Inscription() {
         background: '#0F103E',
         boxShadow: ' 8px 10px 20px 5px rgba(0, 0, 255, .2)',
         opacity: '96%',
-        borderRadius:'10px'
+        borderRadius: '10px'
 
     }
 
@@ -70,8 +76,8 @@ function Inscription() {
                                             <img src={LoginPoss} alt="" width="150px" height="21px" />
                                         </div>
                                         <div class="col-12 md:col-6 lg:col-6" >
-        
-                                        <label style={styleCConn}><b>INSCRIPTION</b></label>
+
+                                            <label style={styleCConn}><b>INSCRIPTION</b></label>
                                         </div>
                                     </center>
                                 </div>
@@ -81,7 +87,7 @@ function Inscription() {
                                         <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
                                             <QuestionCircle color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
                                             <span className="p-float-label">
-                                                <Dropdown inputId="dropdown" value={typeU} options={typeUtilisateur} cla optionLabel="name" onChange={(e) => settypeU(e.value)} style={styleInput} />
+                                                <Dropdown inputId="dropdown" value={typeU} options={typeUtilisateur} name='type_utilisateur' cla optionLabel="name" onChange={(e) => {settypeU(e.value); setdonne({...donne, [e.target.name]: typeU.name }) }} style={styleInput} />
                                                 <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Vous êtes ?</label>
                                             </span>
                                         </div>
@@ -89,17 +95,20 @@ function Inscription() {
                                     </div>
                                 </div>
                                 <div class="col-12" >
-                                    <Etudiant />
+                                    {typeU.name == 'Etudiant' ?
+                                        <Etudiant /> 
+                                        :
+                                        typeU.name == 'Professeur' ?
+                                        <Professeur />
+                                        :
+                                        null
+                                    }
                                 </div>
-                                <div class="col-12" >
-                                    <center>
-                                        <input type="button" class="button button2" value="Inscrire" />
-                                    </center>
-                                </div>
+                                
                                 <div class="col-12">
                                     <div class="grid" style={styleCConn}>
                                         <div class="col-12 pl-4">
-                                            <a href="/" style={{ textDecoration: 'none', color: '#EBE7D9', fontSize: '0.9em', float: 'left' }}>Se connecter</a>
+                                            <Link to="/" style={{ textDecoration: 'none', color: '#EBE7D9', fontSize: '0.9em', float: 'left' }}>Se connecter</Link>
                                         </div>
                                     </div>
                                 </div>
