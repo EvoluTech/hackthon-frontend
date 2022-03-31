@@ -85,7 +85,7 @@ export default function Header(props) {
                                     })
                                 }}>
                                     {Home == 'active' ?
-                                        <HouseFill color="#82CBEB" size={40} className="m-1" /> :
+                                        <HouseFill color="#82CBEB" size={40} className="p-1" /> :
                                         <House color="white" size={40} className="p-1" />
                                     }
                                 </Nav.Link >

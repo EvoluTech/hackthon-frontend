@@ -15,7 +15,7 @@ import Conversation from '../Chat/Conversation'
 
 export default function Acceuill() {
 
-    const [cssNA, setcssNA] = useState({ filter: 'opacity(80%)', height: '530px' });
+    const [cssNA, setcssNA] = useState({ filter: 'opacity(80%)', height: '520px' });
     const stylefont = {
         fontSize: '1rem',
         fontWeight: 'normal',

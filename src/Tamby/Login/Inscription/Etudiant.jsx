@@ -22,6 +22,7 @@ function Etudiant() {
         niveau:"ok",
         parcours:"ok",
         confmdp:"ok",
+        role:"ok"
     })
     const [donneAjout, setdonneAjout] = useState({
         num_matricule:'',
@@ -34,6 +35,9 @@ function Etudiant() {
     const formAjout = (e) => {
         const ds = { ...donneAjout, [e.target.name]: e.target.value };
       setdonneAjout(ds);
+      const valider = { ...validation, [e.target.name]: "ok" };
+      setVlidation(valider);
+
     }
     const fonctNiveau = () => {
         const ds = { ...donneAjout, niveau: niveau.name };
@@ -90,6 +94,24 @@ function Etudiant() {
         if (donneAjout.mdp === "") {
             setVlidation({mdp: "non"})
         }
+        if (donneAjout.num_matricule === "") {
+            setVlidation({num_matricule: "non"})
+        }
+        if (niveau.name === "") {
+            setVlidation({niveau: "non"})
+        }
+        if (parcours.name === "") {
+            setVlidation({parcours: "non"})
+        }
+        if (donneAjout.nom_utilisateur === "") {
+            setVlidation({mdp: "non"})
+        }
+        if (donneAjout.prenom_utilisateur === "") {
+            setVlidation({prenom_utilisateur: "non"})
+        }
+        if (role.name === "") {
+            setVlidation({role: "non"})
+        }
         const post_etudiant = {
             mdp: donneAjout.mdp,
             niveau: niveau.name,
@@ -121,7 +143,7 @@ function Etudiant() {
                         <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Numéro matricule</label>
                     </span>
                 </div>
-                {  validation.num_matricule=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em',fontSize: '0.8em'}}>numero matricule requis</label>}
+                {  validation.num_matricule=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em',fontSize: '0.8em'}}>numero matricule requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}>
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -131,7 +153,7 @@ function Etudiant() {
                         <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Nom d'utilisateur</label>
                     </span>
                 </div>
-                {  validation.nom_utilisateur=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em'}}>nom requis</label>}
+                {  validation.nom_utilisateur=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em'}}>nom requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}>
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -141,7 +163,7 @@ function Etudiant() {
                         <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em',borderColor:"red" }} >Prénom d'utilisateur</label>
                     </span>
                 </div>
-                {  validation.prenom=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em'}}>prenom requis</label>}
+                {  validation.prenom=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em'}}>prenom requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}>
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -151,7 +173,7 @@ function Etudiant() {
                         <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Parcours</label>
                     </span>
                 </div>
-                {  validation.status=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em'}}>numero matricule requis</label>}
+                {  validation.parcours=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em'}}>parcours requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}>  
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -161,7 +183,7 @@ function Etudiant() {
                         <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Niveau d'études</label>
                     </span>
                 </div>
-                {  validation.status=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em'}}>numero matricule requis</label>}
+                {  validation.niveau=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em'}}>niveau requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}> 
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -171,7 +193,7 @@ function Etudiant() {
                         <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Rôle en tant qu'étudiant</label>
                     </span>
                 </div>
-                {  validation.status=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em'}}>numero matricule requis</label>}
+                {  validation.role=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em'}}>role requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}>
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -181,7 +203,7 @@ function Etudiant() {
                         <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Mot de passe</label>
                     </span>
                 </div>
-                {  validation.status=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em'}}>numero matricule requis</label>}
+                {  validation.mdp=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em'}}>mot de passe requis</label>}
             </div>
             <div className="p-field p-col-12" style={styleMarginB}>
                 <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
@@ -191,7 +213,7 @@ function Etudiant() {
                         <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Confimer le mot de passe</label>
                     </span>
                 </div>
-                {  validation.status=='ok'? null : <label style={{color:"red",marginBottom:"2px",float:"right",fontSize: '0.8em',marginTop:"0px"}}>numero matricule requis</label>}
+                {  validation.confmdp=='ok'? null : <label style={{color:"red",marginBottom:"2px",fontSize: '0.8em',marginTop:"0px"}}>veuillez confirmez ici votre mot de passe requis</label>}
             </div>
             <div class="col-12" >
                 <center>
