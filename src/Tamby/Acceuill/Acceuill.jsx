@@ -20,15 +20,31 @@ export default function Acceuill() {
     const [listGroup, setlistGroup] = useState([]);
     const [listProf, setlistProfOnline] = useState([]);
     const [listPubl, setlistPublication] = useState([]);
+    const [user, setuser] = useState({id:''});
+    const token = localStorage.getItem("token");
+    
     const [cssNA, setcssNA] = useState({ filter: 'opacity(80%)', height: '530px' });
-    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY0ODU4OTYwOSwianRpIjoiMjkzZjUwMGYtOGYxMC00OWRhLTkzNWItZDE2YjMyNzZhMGE2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6W3sibnVtX21hdHJpY3VsZSI6MzMxNSwibm9tIjoiZWRkeSIsInByZW5vbSI6InRzYWxhbWEiLCJuaXZlYXUiOiJNMSIsInBhcmNvdXJzIjoiTTJJIiwibWRwIjoiJDJiJDEyJGFXNW9ML1Y5a0U3cjRudFFEUERDc3V0bGRnN3pDbUZ2Vlpzd1BKbC9Ob05aVkh4Y3UvbEYuIiwic3RhdHUiOiIwIn1dLCJuYmYiOjE2NDg1ODk2MDksImV4cCI6MTY0ODg0ODgwOX0.xs93OPWIhpKCJWG3DgUv2qba5IDwKJUGkBOp7xR1IkM';
     const stylefont = {
         fontSize: '0.8rem',
         fontWeight: 'normal',
         // backgroundColor:'grey',
         fontFamily: "apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
     };
-
+  
+    function decode() {
+     if (token) {   var base64Url = token.split(".")[1];
+        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        var jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+        );
+        
+        return JSON.parse(jsonPayload);}
+    }
     useEffect(() => {
         axios.get('http://127.0.0.1:5000/groupe/list', {
             headers: {
@@ -58,6 +74,9 @@ export default function Acceuill() {
                 const list = res.data.publication;
                 setlistPublication({ list })
             })
+
+        const profile = decode(token);
+        setuser({id:profile.sub[0].num_matricule})
     }, []);
 
     useEffect(() => {
@@ -189,24 +208,32 @@ export default function Acceuill() {
                                     <center>
                                         <div className="scrollpanel-demo">
                                             <ScrollPanel style={cssNA} className="custombar1">
-                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
-                                                    {
+                                            {
                                                     listPubl.list?.map((data, index) => (
+                                            <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
                                                     <div class="col-12 " style={stylepub0} >
-                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
-                                                        <br />
-                                                        <hr style={{ paddingT: '2px' }} />
-                                                        <div style={{ padding: "5px 10px 10px 10px", float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description_pub}</i></b> </div>
-                                                        <div  >
-                                                            {data.contenu_pub}
+                                                        <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                            <div class="col-12 " style={{ float: 'left' }}>
+                                                                <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
+                                                                <br />
+                                                                <hr style={{ paddingT: '1px' }} />
+                                                            </div>
+                                                            <div class="col-12  " style={{ float: 'left' }}>
+                                                                <div style={{ float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description_pub}</i></b> </div>
+                                                            </div>
+                                                            <div class="col-12 mb-1 " style={{ float: 'left' }}>
+                                                                <center>
+                                                                {data.contenu_pub}
+                                                           </center>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                </div>
                                                     ))
                                                     }
-                                                </div>
-
                                                 <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
                                             </ScrollPanel>
+                                                    
                                         </div>
                                     </center>
                                 </div>
@@ -225,7 +252,7 @@ export default function Acceuill() {
                                             {
                                                 listProf.list?.map((data, index) => (
                                                 <ListGroup.Item action key={index} style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom={data.nom} prenom={data.prenom} role={data.role} />
+                                                    <Conversation monId={user.id} idPers={data.code_prof} photoProfil={photoProfil} nom={data.nom} prenom={data.prenom} role={data.role} />
                                                 </ListGroup.Item>
                                                 ))
                                             }

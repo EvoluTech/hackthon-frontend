@@ -19,13 +19,37 @@ const CreerPub = (props) => {
         borderRadius: '3px',
         float: 'right',
         marginRight: '30px'
-    }; 
+    };
+    const current = new Date();
     const [donneAjout, setdonneAjout] = useState({
         typecontenu: '',
-        cible:'',
-        description_pub:'',
-        contenue:''
-    })
+        cible: '',
+        description_pub: '',
+        contenue: '',
+        num_matricule: '',
+        role: localStorage.getItem("role"),
+        date_pub: `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`,
+    });
+    const token = localStorage.getItem("token");
+    const creepub = async() => {
+    // e.preventDefault();
+      await  axios.post('http://127.0.0.1:5000/create/publication',donneAjout, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+  
+        })
+            .then(res => {
+                // const list = res.data.groupe;
+                // console.log(res.data.groupe) ;
+                // setlistGroup({ list });
+                console.log(res);
+            }).catch(error => {
+                console.log(error);
+            });
+            
+    }
+    const [cibelNon, setcibelNon] = useState('')
     const style = {
         display: 'block',
         width: '100%',
@@ -67,6 +91,26 @@ const CreerPub = (props) => {
         dialogFuncMap[`${name}`](false);
     }
 
+    function decode() {
+        if (token) {   var base64Url = token.split(".")[1];
+           var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+           var jsonPayload = decodeURIComponent(
+             atob(base64)
+               .split("")
+               .map(function (c) {
+                 return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+               })
+               .join("")
+           );
+           
+           return JSON.parse(jsonPayload);}
+       }
+    
+    useEffect(() => {
+        const profile = decode(token);
+        // setuser(profile.sub[0]);
+        setdonneAjout({...donneAjout,num_matricule:profile.sub[0].num_matricule})
+    },[])
 
     const renderFooter = (name) => {
         return (
@@ -88,9 +132,9 @@ const CreerPub = (props) => {
 
                         <Form.Group as={Col} >
                             <Form.Label>Description* :</Form.Label>
-                            <Form.Control type="text" style={style} name="description_pub" id='description_pub' required placeholder="Entrez description de la publication"  onChange={(e) => {
-                                    setdonneAjout({ ...donneAjout, description_pub: e.target.value })
-                                }}/>
+                            <Form.Control type="text" style={style} name="description_pub" id='description_pub' required placeholder="Entrez description de la publication" onChange={(e) => {
+                                setdonneAjout({ ...donneAjout, description_pub: e.target.value })
+                            }} />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridAddress1">
@@ -107,13 +151,12 @@ const CreerPub = (props) => {
                         </Form.Group>
                         {donneAjout.typecontenu == 'text' ?
                             <Form.Group as={Col} >
-                               
-                                <textarea class="form-control" rows="2" name="contenue" id='contenue' placeholder='Entrez le contenue de la publication...' 
-                                 onChange={(e) => {
-                                    setdonneAjout({ ...donneAjout, contenue: e.target.value })
-                                }}/>
-                            </Form.Group>
 
+                                <textarea class="form-control" rows="2" name="contenue" id='contenue' placeholder='Entrez le contenue de la publication...'
+                                    onChange={(e) => {
+                                        setdonneAjout({ ...donneAjout, contenue: e.target.value })
+                                    }} />
+                            </Form.Group>
                             :
                             donneAjout.typecontenu == 'image' ?
                                 // <Form.Group as={Col} controlId="formGridState">
@@ -122,55 +165,54 @@ const CreerPub = (props) => {
                                 //         label="Choisir un  image"
                                 //         className="inputClass"
                                 //         onChange={(e) => { }} />
+                                // onChange={(e) => {
+                                //     setdonneAjout({ ...donneAjout, cible: e.target.value })
+                                // }}
                                 // </Form.Group>
-                                null 
+                                null
                                 :
                                 null
                         }
-                            <Form.Group as={Col} controlId="formGridAddress1">
+                        <Form.Group as={Col} controlId="formGridAddress1">
                             <Form.Label>Cible de la pub*</Form.Label>
                             <Form.Control as="select" style={style} name="cible" id='cible'
                                 onChange={(e) => {
-                                    setdonneAjout({ ...donneAjout, cible: e.target.value })
-                                }}
-                            >
+                                    setcibelNon(e.target.value);
+                                    if (e.target.value == 'tous' || e.target.value == 'prof') {
+                                        setdonneAjout({ ...donneAjout, cible: 'tous' })
+                                    }
+                                }}>
                                 <option value="">Cible de la plublication...</option>
                                 <option value="tous">Pour tous le monde</option>
-                                <option value="tous">Pour tous les profs (Seulement)</option>
-                                <option value=" ">*********/Par Niveau/*******</option>
-                                <option value="NM2">Pour M2 </option>
-                                <option value="NM1">Pour M1 </option>
-                                <option value="NL3">Pour L3 </option>
-                                <option value="NL2">Pour L2 </option>
-                                <option value="NL1">Pour L1 </option>
-                                <option value=" ">*********/Par parcours/*******</option>
-                                <option value="PDA2I">Pour DA2I </option>
-                                <option value="PAES">Pour AES </option>
-                                <option value="PRPM">Pour RPM </option>
-                                <option value=" ">*********/Par Nievau et parcours/*******</option>
-                                <option value="NPM2D">Pour M2 DA2I</option>{/**NPM2D Niveau Parcours M2 Dasi*/ }
-                                <option value="NPM2A">Pour M2 AES</option>
-                                <option value="NPM2R">Pour M2 RPM</option>
-                                <option value=" ">*********//*******</option>
-                                <option value="NPM1D">Pour M1 DA2I</option>
-                                <option value="NPM1A">Pour M1 AES</option>
-                                <option value="NPM1R">Pour M1 RPM</option>
-                                <option value=" ">*********//*******</option>
-                                <option value="NPL3D">Pour L3 DA2I</option>
-                                <option value="NPL3A">Pour L3 AES</option>
-                                <option value="NPL3R">Pour L3 RPM</option>
-                                <option value=" ">*********//*******</option>
-                                <option value="NPL2D">Pour L2 DA2I</option>
-                                <option value="NPL2A">Pour L2 AES</option>
-                                <option value="NPL2R">Pour L2 RPM</option>
-                                <option value=" ">*********//*******</option>
-                                <option value="NPL1D">Pour L1 DA2I</option>
-                                <option value="NPL1A">Pour L1 AES</option>
-                                <option value="NPL1R">Pour L1 RPM</option>
+                                <option value="prof">Pour tous les profs (Seulement)</option>
+                                <option value="M2">Pour M2 </option>
+                                <option value="M1">Pour M1 </option>
+                                <option value="L3">Pour L3 </option>
+                                <option value="L2">Pour L2 </option>
+                                <option value="L1">Pour L1 </option>
                             </Form.Control>
                         </Form.Group>
+                        {(cibelNon == 'M2' || cibelNon == 'M1'|| cibelNon == 'L3' || cibelNon == 'L2' || cibelNon == 'L1') ?
+                            <Form.Group as={Col} controlId="formGridAddress1">
+                                <Form.Label>Cible de la pub*</Form.Label>
+                                <Form.Control as="select" style={style} name="cible" id='cible'
+                                    onChange={(e) => {
+                                        setdonneAjout({ ...donneAjout, cible: cibelNon + '' + e.target.value })
+                                    }}>
+                                    <option value="">Choisir le parcours...</option>
+                                    <option value="tous">Tous</option>
+                                    <option value="DASI">Pour DASI </option>
+                                    <option value="AES">Pour AES </option>
+                                    <option value="RPM">Pour RPM </option>
+
+                                </Form.Control>
+                            </Form.Group>
+                            :
+                            null
+                        }
                     </Form>
-                    <Button label="Publier" className="p-button-primary" icon="pi pi-send" style={stylebtnEnrg} iconPos="right"  />
+                    <Button label="Publier" className="p-button-primary" icon="pi pi-send" style={stylebtnEnrg} iconPos="right" onClick={()=>
+                        {creepub()}}/>
                 </div>
             </Dialog>
         </Fragment >

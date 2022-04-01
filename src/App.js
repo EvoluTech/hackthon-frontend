@@ -27,10 +27,11 @@ const token = localStorage.getItem("token");
     <div className="body">
       <Router>
      
-       {logged ? <Route exact path="/Home" component={Acceuil}></Route> : <Redirect to={"/"} />  }
-      {logged ? <Route exact path="/Chat" component={Chat}></Route> : <Redirect to={"/"} />  }
-     {logged ?  <Route exact path="/Groupe" component={Groupe}></Route> :<Redirect to={"/"} />  }
-     {!logged ? <Route exact path="/" component={Login}></Route> : <Redirect to={"/home"} />}
+      <Route exact path="/Home" component={Acceuil}></Route> 
+     <Route exact path="/Chat" component={Chat}></Route> 
+     <Route exact path="/Groupe" component={Groupe}></Route> 
+     <Route exact path="/" component={Login}></Route>
+    <Route exact path="/ListGroupe/Groupe" component={Groupe}></Route>
         <Route exact path="/inscription" component={Inscription}></Route>
       </Router>
     </div>
@@ -38,4 +39,3 @@ const token = localStorage.getItem("token");
 }
 
 export default App;
- 

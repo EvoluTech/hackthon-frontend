@@ -73,19 +73,18 @@ function Etudiant() {
 				);
 				console.log(response);
                 const token = response.data['token'];
+                const role = response.data['role'].role;
                 const info = decode(token);
-                const utilisateur = info.sub[0];
-               if (utilisateur.statu == 0) {
+                console.log(role);
+                console.log(info.sub);
+               if (info.sub.statu == 0) {
                    alert("veuillez attendre que votre inscription soit valider");
                }else{
                 history.push("/home")
                }
                localStorage.setItem("token",token);
-               localStorage.setItem("role",response.data['role'].role)
-               console.log(token);
-               console.log(info['exp']);
-               console.log(utilisateur);
-               console.log(response.data['role'])
+               localStorage.setItem("role",role)
+              
 			} catch (error) {
 				console.log(error.response);
 			}

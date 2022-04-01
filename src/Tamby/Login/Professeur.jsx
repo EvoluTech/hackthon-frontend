@@ -13,13 +13,13 @@ import { useHistory } from "react-router-dom";
 
 function Professeur() {
 
- 
-    //Css
 
-    const history = useHistory();
- const [error,seterror] = useState({
-     msg:""
- });
+  //Css
+
+  const history = useHistory();
+  const [error, seterror] = useState({
+    msg: ""
+  });
   const [donneAjout, setdonneAjout] = useState({
     code_prof: "",
     mdp: ""
@@ -30,7 +30,7 @@ function Professeur() {
     setdonneAjout(ds);
   };
 
- 
+
 
   const styleInput = {
     border: "none",
@@ -53,93 +53,118 @@ function Professeur() {
     marginBottom: "20px",
     // Top:'20px'
   };
+  function decode(token) {
+    var base64Url = token.split(".")[1];
+    var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    var jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
 
+    return JSON.parse(jsonPayload);
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.clear();
-    if (donneAjout.mdp === donneAjout.confmdp) {
-        seterror({msg:""});
-        try {
-            const response = await axios.post(
-                          "http://127.0.0.1:5000/login/prof",donneAjout
-                      );
-          console.log(response);
-          } catch (error) {
-            console.log(error.response);
-          }
-    }else{
-        seterror({msg:"les mots de passe ne se correspondent pas !"});
-        console.log(error.msg);
+    // if (donneAjout.mdp === donneAjout.confmdp) {
+    seterror({ msg: "" });
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/login/prof", donneAjout
+      );
+      console.log(response);
+      const token = response.data['token'];
+      const role = response.data['role'].role;
+      const info = decode(token);
+      console.log(role);
+      console.log(info.sub);
+      // if (info.sub.status == 0) {
+      //   alert("veuillez attendre que votre inscription soit valider");
+      // } else {
+      // }
+      history.push("/home")
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role)
+    } catch (error) {
+      console.log(error.response);
     }
-}
-    return (
-        <div className="p-fluid">
+    // }else{
+    //     seterror({msg:"les mots de passe ne se correspondent pas !"});
+    //     console.log(error.msg);
+    // }
+  }
+  return (
+    <div className="p-fluid">
 
-<div className="p-fluid">
-      <form
-        onSubmit={handleSubmit}
-        style={{ paddingLeft: "50px", paddingRight: "50px" }}
-      >
-        <div class="form-group" style={{ paddingBottom: "18px" }}>
-          <div class="input-group">
-            <div className="input-group-addon">
-              <PersonBadge
-                color="#0D0F34"
-                size={33}
-                style={{
-                  backgroundColor: "#E7F2FA",
-                  borderRadius: "4px 0px 0px 4px",
-                }}
-                className="p-1"
+      <div className="p-fluid">
+        <form
+          onSubmit={handleSubmit}
+          style={{ paddingLeft: "50px", paddingRight: "50px" }}
+        >
+          <div class="form-group" style={{ paddingBottom: "18px" }}>
+            <div class="input-group">
+              <div className="input-group-addon">
+                <PersonBadge
+                  color="#0D0F34"
+                  size={33}
+                  style={{
+                    backgroundColor: "#E7F2FA",
+                    borderRadius: "4px 0px 0px 4px",
+                  }}
+                  className="p-1"
+                />
+              </div>
+
+              <input
+                type="number"
+                class="form-control"
+                id="uname"
+                style={styleInput}
+                placeholder="Votre code en tant que professeur"
+                name="code_prof"
+                onChange={(e) => formAjout(e)}
+                required
               />
             </div>
-
-            <input
-              type="number"
-              class="form-control"
-              id="uname"
-              style={styleInput}
-              placeholder="Votre code en tant que professeur"
-              name="code_prof"
-              onChange={(e) => formAjout(e)}
-              required
-            />
           </div>
-        </div>
-        <div class="form-group" style={{ paddingBottom: "18px" }}>
-          <div class="input-group">
-            <div className="input-group-addon">
-              <Lock
-                color="#0D0F34"
-                size={33}
-                style={{
-                  backgroundColor: "#E7F2FA",
-                  borderRadius: "4px 0px 0px 4px",
-                }}
-                className="p-1"
+          <div class="form-group" style={{ paddingBottom: "18px" }}>
+            <div class="input-group">
+              <div className="input-group-addon">
+                <Lock
+                  color="#0D0F34"
+                  size={33}
+                  style={{
+                    backgroundColor: "#E7F2FA",
+                    borderRadius: "4px 0px 0px 4px",
+                  }}
+                  className="p-1"
+                />
+              </div>
+
+              <input
+                type="password"
+                class="form-control form-control-sm"
+                style={styleInput}
+                id="pwd"
+                placeholder="Votre mot de passe"
+                name="mdp"
+                onChange={(e) => formAjout(e)}
+                required
               />
             </div>
-
-            <input
-              type="password"
-              class="form-control form-control-sm"
-              style={styleInput}
-              id="pwd"
-              placeholder="Votre mot de passe"
-              name="mdp"
-              onChange={(e) => formAjout(e)}
-              required
-            />
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary">
-          S'inscrire
-        </button>
-      </form>
+          <button type="submit" class="btn btn-primary">
+            S'inscrire
+          </button>
+        </form>
+      </div>
+
     </div>
-
-        </div>
-    );
+  );
 }
 
 export default Professeur;

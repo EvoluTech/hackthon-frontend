@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Navbar, Nav, Form } from 'react-bootstrap';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
@@ -20,7 +20,9 @@ export default function Header(props) {
     const [Chats, setChats] = useState("Chat");
     const [Groupes, setGroupes] = useState("Groupe");
     const [Compte, setCompte] = useState("Compte");
+    const [user,setuser] = useState({});
     const histor = useHistory();
+    const token = localStorage.getItem("token");
     const profil = useRef(null);
     const footer = (
         <span>
@@ -72,20 +74,26 @@ export default function Header(props) {
     const repere1 = {
         border: '1px solid red'
     }
-    function decode(token) {
-        var base64Url = token.split(".")[1];
-        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        var jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split("")
-            .map(function (c) {
-              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join("")
-        );
-        
-        return JSON.parse(jsonPayload);
-    }
+    function decode() {
+        if (token) {   var base64Url = token.split(".")[1];
+           var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+           var jsonPayload = decodeURIComponent(
+             atob(base64)
+               .split("")
+               .map(function (c) {
+                 return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+               })
+               .join("")
+           );
+           
+           return JSON.parse(jsonPayload);}
+       }
+    
+    useEffect(() => {
+        const profile = decode(token);
+        setuser(profile.sub[0]);
+    },[])
+
   function logout(){
       localStorage.clear();
   }
@@ -170,7 +178,9 @@ export default function Header(props) {
                             <img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '80px', height: '80px', marginTop: '0.5rem', verticalAlign: 'middle' }} />
                             <br/>
                             <Profil  titre='Modification Profil' />
-                            <label className="ml-3" style={{ cursor: 'pointer'}}><spam style={{fontSize:'1em'}}><b>RASOLONDRAIBE Tamby Arimisa</b></spam></label>
+                      
+                            <label  className="ml-3" style={{ cursor: 'pointer'}}><spam style={{fontSize:'1em'}}><b>{user.nom}</b></spam></label>
+                     
                         </center>
                     </div>
                     <div className="col-12 md:col-6 lg:col-12 " style={repere1}>

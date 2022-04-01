@@ -80,7 +80,7 @@ const token = localStorage.getItem("token");
  }, 1000);
     return (
     <div style={styleBody}>
-          { !logged ? 
+        
             <center>
                 <div style={styleLogin} >
                     <div class="grid">
@@ -134,7 +134,7 @@ const token = localStorage.getItem("token");
                     </div>
                 </div>
             </center>
-            : <div></div> }
+          
         </div > 
     );
 }
