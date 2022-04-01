@@ -21,14 +21,16 @@ export default function Header(props) {
     const histor = useHistory();
     const profil = useRef(null);
 
-    console.log(histor)
+
     const styleheader = {
         fontSize: '1.14em',
         backgroundColor: '#0F103E'
     }
     const stylenavbar = {
         margin: '0px',
-        padding: '3px',
+        padding: '0px',
+        height:'50px',
+        fontSize:'0.8em'
     }
 
     if (props.active === Home) {
@@ -63,6 +65,24 @@ export default function Header(props) {
     const repere1 = {
         border: '1px solid red'
     }
+    function decode(token) {
+        var base64Url = token.split(".")[1];
+        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        var jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map(function (c) {
+              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join("")
+        );
+        
+        return JSON.parse(jsonPayload);
+    }
+  function logout(){
+      localStorage.clear();
+  }
+
     return (
         <>
             <div className="header">
@@ -85,8 +105,8 @@ export default function Header(props) {
                                     })
                                 }}>
                                     {Home == 'active' ?
-                                        <HouseFill color="#82CBEB" size={40} className="p-1" /> :
-                                        <House color="white" size={40} className="p-1" />
+                                        <HouseFill color="#82CBEB" size={35} className="p-1" /> :
+                                        <House color="white" size={35} className="p-1" />
                                     }
                                 </Nav.Link >
 
@@ -97,8 +117,8 @@ export default function Header(props) {
                                     })
                                 }}>
                                     {Chats == 'active' ?
-                                        <ChatFill color="#82CBEB" size={40} className="p-1" /> :
-                                        <Chat color="white" size={40} className="p-1" />
+                                        <ChatFill color="#82CBEB" size={35} className="p-1" /> :
+                                        <Chat color="white" size={35} className="p-1" />
                                     }
 
                                 </Nav.Link>
@@ -108,12 +128,12 @@ export default function Header(props) {
                                     })
                                 }}>
                                     {Groupes == 'active' ?
-                                        <PeopleFill color="#82CBEB" size={40} className="p-1" /> :
-                                        <People color="white" size={40} className="p-1" />
+                                        <PeopleFill color="#82CBEB" size={35} className="p-1" /> :
+                                        <People color="white" size={35} className="p-1" />
                                     }
                                 </Nav.Link>
                                 <Nav.Link className="mr-5">
-                                    <Bell color="white" size={40} className="p-1" />
+                                    <Bell color="white" size={35} className="p-1" />
                                 </Nav.Link>
                             </Nav>
                             <Form inline >
@@ -121,13 +141,13 @@ export default function Header(props) {
                                     <div className="pl-1  pr-5" >
                                         <Nav.Link data-toggle="tooltip" title="Votre profil" onClick={(e) => profil.current.toggle(e)}>
 
-                                            <PersonCircle color="white" size={40} className="p-1" />
+                                            <PersonCircle color="white" size={35} className="p-1" />
                                         </Nav.Link>
                                     </div>
                                     <div className="pl-1  pr-5" >
                                         <Nav.Link data-toggle="tooltip" title="Qlch">
 
-                                            <List color="white" size={40} className="p-1" />
+                                            <List color="white" size={35} className="p-1" />
                                         </Nav.Link>
                                     </div>
                                 </Nav>
@@ -144,6 +164,10 @@ export default function Header(props) {
                             <br/>
                             <Profil  titre='Modification Profil' />
                             <label className="ml-3" style={{ cursor: 'pointer'}}><spam style={{fontSize:'1em'}}><b>RASOLONDRAIBE Tamby Arimisa</b></spam></label>
+                            <Nav.Link data-toggle="tooltip" title="Votre profil" onClick={(e) => profil.current.toggle(e)}>
+
+<PersonCircle color="white" size={35} className="p-1" />
+</Nav.Link>
                         </center>
                     </div>
                     <div className="col-12 md:col-6 lg:col-12 " style={repere1}>

@@ -65,8 +65,22 @@ function Login() {
         marginBottom: "20px"
         // Top:'20px'
     }
+    const [logged,setlogged] = useState(false);
+
+    
+ setInterval(() => {
+       
+const token = localStorage.getItem("token");  
+
+  if (token) {
+    setlogged(true);
+  }else{
+    setlogged(false)
+  }
+ }, 1000);
     return (
-        <div style={styleBody}>
+    <div style={styleBody}>
+          { !logged ? 
             <center>
                 <div style={styleLogin} >
                     <div class="grid">
@@ -120,7 +134,8 @@ function Login() {
                     </div>
                 </div>
             </center>
-        </div >
+            : <div></div> }
+        </div > 
     );
 }
 

@@ -12,6 +12,10 @@ import axios from "axios";
 
 
 function Etudiant() {
+    const history = useHistory();
+    const [error,seterror] = useState({
+        msg:""
+    });
     const [donneAjout, setdonneAjout] = useState({
         num_matricule:'',
         mdp:''
@@ -74,42 +78,83 @@ function Etudiant() {
                if (utilisateur.statu == 0) {
                    alert("veuillez attendre que votre inscription soit valider");
                }else{
-                alert("bienvenue utilisateur");
+                history.push("/home")
                }
+               localStorage.setItem("token",token);
+               localStorage.setItem("role",response.data['role'].role)
+               console.log(token);
+               console.log(info['exp']);
                console.log(utilisateur);
+               console.log(response.data['role'])
 			} catch (error) {
 				console.log(error.response);
 			}
         }
     return (
         <div className="p-fluid">
-
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <PersonBadge color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <InputText id="inputtext" style={styleInput} className="p-inputtext-sm block mb-0" name="num_matricule" onChange={(e)=>formAjout(e)} />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Numéro matricule</label>
-                    </span>
-                </div>
-
+        <form
+          onSubmit={handleSubmit}
+          style={{ paddingLeft: "50px", paddingRight: "50px" }}
+        >
+          <div class="form-group" style={{ paddingBottom: "18px" }}>
+            <div class="input-group">
+              <div className="input-group-addon">
+                <PersonBadge
+                  color="#0D0F34"
+                  size={33}
+                  style={{
+                    backgroundColor: "#E7F2FA",
+                    borderRadius: "4px 0px 0px 4px",
+                  }}
+                  className="p-1"
+                />
+              </div>
+  
+              <input
+                type="number"
+                class="form-control"
+                id="uname"
+                style={styleInput}
+                placeholder="Numéro matricule"
+                name="num_matricule"
+                onChange={(e) => formAjout(e)}
+                required
+              />
             </div>
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <Lock color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" /> 
-                    <span className="p-float-label">
-                        <Password className="p-inputtext  " name="mdp" style={styleInput} toggleMask feedback={false} onChange={(e)=>formAjout(e)} />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Mot de passe</label>
-                    </span>
-                </div>
+          </div>
+       
+       
+          <div class="form-group" style={{ paddingBottom: "18px" }}>
+            <div class="input-group">
+              <div className="input-group-addon">
+                <Lock
+                  color="#0D0F34"
+                  size={33}
+                  style={{
+                    backgroundColor: "#E7F2FA",
+                    borderRadius: "4px 0px 0px 4px",
+                  }}
+                  className="p-1"
+                />
+              </div>
+  
+              <input
+                type="password"
+                class="form-control form-control-sm"
+                style={styleInput}
+                id="pwd"
+                placeholder="Votre mot de passe"
+                name="mdp"
+                onChange={(e) => formAjout(e)}
+                required
+              />
             </div>
-            <div class="col-12" >
-                <center>
-                    <input type="button" onClick={handleSubmit} class="button button2" value="Se connecter" />
-                </center>
-            </div>
-
-        </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            S'inscrire
+          </button>
+        </form>
+      </div>
     );
 }
 

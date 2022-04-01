@@ -9,11 +9,12 @@ import { ScrollTop } from 'primereact/scrolltop';
 import axios from 'axios';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { Person, PersonBadge } from 'react-bootstrap-icons';
+import { useHistory } from 'react-router-dom';
 
-import Profil from '../Profil/Profil'
 
-const Conversation = (props) => {
+const Liste = (props) => {
 
+    const histor = useHistory();
     const op = useRef(null);
     const stylebtnEnrg = {
         padding: '0.5rem 1rem',
@@ -82,45 +83,58 @@ const Conversation = (props) => {
 
     return (
         <Fragment>
-            <label style={{ cursor: 'pointer' }} onClick={() => { onClick('displayPosition'); }} onMouseOut={(e)=>{op.current.hide(e)}} onMouseOver={(e) => { op.current.toggle(e) }} ><img alt="Profil" src={props.photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '4px' }} /> {props.nom + ' ' + props.prenom}  </label>
-            {/* <Button icon='pi pi-plus '  iconPos="right" className="p-button-rounded  p-button-secondary"
-                /> */}
+            <label style={{ cursor: 'pointer' }} 
+            onClick={() => { 
+                histor.push({
+                    pathname: '/Groupe',
+                    state: {
+                        idGroupe: props.idGroupe,
+                        nomGroupe: props.nomGroupe,
+                        nomChefGroupe: props.chefGroupe,
+                        tuteurGroupe: props.tuteur
+                    }
+                })
+             }} onMouseOut={(e)=>{op.current.hide(e)}} onMouseOver={(e) => { op.current.toggle(e) }} > <img alt="Profil" src={props.logoEM} style={{ borderRadius: '10%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '4px' }} />   {props.nomGroupe}</label>
+
             <OverlayPanel ref={op} id="overlay_panel" style={{ width: '20em', height: '10em' }} className="overlaypanel-demo"  >
                 <div class="grid">
                     <div className="col-12 md:col-6 lg:col-12 " >
                         <center>
-                            <img alt="Profil" src={props.photoProfil} style={{ borderRadius: '50%', width: '35px', height: '25px', marginTop: '0.5rem', verticalAlign: 'middle' }} />
+                            <img alt="Profil" src={props.logoEM} style={{ borderRadius: '50%', width: '50px', height: '20px', marginTop: '0.5rem', verticalAlign: 'middle' }} />
                             <br />
-                            <label className="ml-3" style={{ cursor: 'pointer' }}><spam style={{ fontSize: '1em' }}><b>{props.nom + ' ' + props.prenom}</b></spam></label><br />
+                            <label className="ml-3" style={{ cursor: 'pointer' }}><spam style={{ fontSize: '1em' }}><b>{props.nomGroupe}</b></spam></label>
                         </center>
                     </div>
-                    <div className="col-12 md:col-6 lg:col-12 ">
+                    <div className="col-12 md:col-6 lg:col-12 " >
                         <label className="pl-2 pr-1" style={{ cursor: 'pointer', fontSize: '0.75em' }}>
-                            Nom Profs  : <b>{props.nom + ' ' + props.prenom}</b>
+                            Parraigné par   : <b>{props.tuteur}</b>
                         </label> <br />
                         <label className="pl-2 pr-3" style={{ cursor: 'pointer', fontSize: '0.75em' }}>
-                          Rôle: <b>{props.role}</b>
+                          Chef de groupe: <b>{props.chefGroupe}</b>
                         </label>
+                    </div>
+                    <div className="col-12 md:col-6 lg:col-12 " >
+
                     </div>
                 </div>
             </OverlayPanel>
 
-            <Dialog header="Envoyer  message" visible={displayPosition} position={position} maximizable modal style={{ width: '25vw' }} footer={renderFooter('displayPosition')} onHide={() => onHide('displayPosition')}>
+            <Dialog header="Envoyer  message" visible={displayPosition} position={position} maximizable modal style={{ width: '30vw' }} footer={renderFooter('displayPosition')} onHide={() => onHide('displayPosition')}>
                 <div className="p-m-0" style={stylefont} >
                     <div class="grid">
                         <div className="col-12 md:col-6 lg:col-12 " >
                             <center>
-                                <img alt="Profil" src={props.photoProfil} style={{ borderRadius: '50%', width: '80px', height: '80px', marginTop: '0.5rem', verticalAlign: 'middle' }} />
+                                <img alt="Profil" src={props.logoEM} style={{ borderRadius: '50%', width: '80px', height: '80px', marginTop: '0.5rem', verticalAlign: 'middle' }} />
                                 <br />
-                                <label className="ml-3" style={{ cursor: 'pointer' }}><spam style={{ fontSize: '1em' }}><b>{props.nom + ' ' + props.prenom}</b></spam></label><br />
+                                <label className="ml-3" style={{ cursor: 'pointer' }}><spam style={{ fontSize: '1em' }}><b>{props.nomGroupe}</b></spam></label><br />
                             </center>
                         </div>
                         <div className="col-12 md:col-6 lg:col-12 ">
                             <label className="pl-2 pr-1" style={{ cursor: 'pointer', fontSize: '1em' }}>
-                                <Person color="#0D0F34" size={35} className="p-2 mb-1" /> Nom Profs  : <b>{props.nom + ' ' + props.prenom}</b>
+                                <Person color="#0D0F34" size={35} className="p-2 mb-1" /> Parraigné par   : <b>{props.tuteur}</b>
                             </label> <br />
                             <label className="pl-2 pr-3" style={{ cursor: 'pointer', fontSize: '1em' }}>
-                                <PersonBadge color="#0D0F34" size={35} className="p-2 mb-1" />  Rôle: <b>{props.role}</b>
+                                <PersonBadge color="#0D0F34" size={35} className="p-2 mb-1" /> Chef de groupe: <b>{props.chefGroupe}</b>
                             </label>
                         </div>
                         <div className="col-12 md:col-6 lg:col-12 ">
@@ -140,4 +154,4 @@ const Conversation = (props) => {
         </Fragment >
     )
 }
-export default Conversation;
+export default Liste;

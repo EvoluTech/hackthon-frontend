@@ -7,11 +7,13 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Dropdown } from 'primereact/dropdown';
 import { QuestionDiamond, PersonBadge, Person, Pc, BarChartSteps, Lock, PersonBoundingBox } from 'react-bootstrap-icons';
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 
 function Professeur() {
 
-
+ 
     const [role, setrole] = useState(null)
     const typeRole = [
         { name: 'Directeur'},
@@ -23,82 +25,269 @@ function Professeur() {
     ];
     //Css
 
-    const styleInput = {
-        border: 'none',
-        borderRadius: '0px 25px 25px 0px',
-        opacity: '40%',
-        color: 'Black',
-        height: '33px'
-    }
+    const history = useHistory();
+ const [error,seterror] = useState({
+     msg:""
+ });
+  const [donneAjout, setdonneAjout] = useState({
+    code_prof: "",
+    nom: "",
+    prenom: "",
+    mdp: "",
+    confmdp: "",
+    num_tel: "",
+    role: ""
+  });
 
-    const styleMarginB = {
-        marginBottom: "20px"
-        // Top:'20px'
+  const formAjout = (e) => {
+    const ds = { ...donneAjout, [e.target.name]: e.target.value };
+    setdonneAjout(ds);
+  };
+
+ 
+
+  const styleInput = {
+    border: "none",
+    borderRadius: "0px 25px 25px 0px",
+    opacity: "70%",
+    color: "black",
+    height: "33px",
+  };
+  const styleCoteD = {
+    background: "#0F103E",
+    opacity: "96%",
+  };
+
+  const styleCConn = {
+    color: "#EBE7D9",
+    fontFamily: "Verdana",
+    // Top:'20px'
+  };
+  const styleMarginB = {
+    marginBottom: "20px",
+    // Top:'20px'
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.clear();
+    if (donneAjout.mdp === donneAjout.confmdp) {
+        seterror({msg:""});
+        try {
+            const response = await axios.post(
+                          "http://127.0.0.1:5000/professeur/add",donneAjout,{
+                            headers: {
+                                'Access-Control-Allow-Origin': true,
+                              },
+                          }
+                      );
+          console.log(response);
+          } catch (error) {
+            console.log(error.response);
+          }
+    }else{
+        seterror({msg:"les mots de passe ne se correspondent pas !"});
+        console.log(error.msg);
     }
+}
     return (
         <div className="p-fluid">
 
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <PersonBadge color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <InputText id="inputtext" style={styleInput} className="p-inputtext-sm block mb-0" name="code_prof" />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Code prof</label>
-                    </span>
-                </div>
+<div className="p-fluid">
+      <form
+        onSubmit={handleSubmit}
+        style={{ paddingLeft: "50px", paddingRight: "50px" }}
+      >
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <PersonBadge
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
+            </div>
 
+            <input
+              type="number"
+              class="form-control"
+              id="uname"
+              style={styleInput}
+              placeholder="Votre code en tant que professeur"
+              name="code_prof"
+              onChange={(e) => formAjout(e)}
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <Person
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
             </div>
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <Person color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <InputText id="inputtext" style={styleInput} className="p-inputtext-sm block mb-0" name="nom_prof" />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Nom Professeur</label>
-                    </span>
-                </div>
-            </div>
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <PersonBoundingBox color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <InputText id="inputtext" style={styleInput} className="p-inputtext-sm block mb-0" name="prenom_prof" />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Prénom Professeur</label>
-                    </span>
-                </div>
-            </div>
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <BarChartSteps color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <Dropdown inputId="dropdown" value={role} options={typeRole} cla optionLabel="name" onChange={(e) => setrole(e.value)} style={styleInput} />
-                        <label htmlFor="dropdown" style={{ color: '#EEEFEF', fontSize: '0.8em' }}>Rôle </label>
-                    </span>
-                </div>
 
+            <input
+              type="text"
+              className="form-control"
+              id="uname"
+              style={styleInput}
+              placeholder="votre Nom"
+              name="nom"
+              onChange={(e) => formAjout(e)}
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <PersonBoundingBox
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
             </div>
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <Lock color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <Password className="p-inputtext  " name="mdp_prof" style={styleInput} toggleMask feedback={false} />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Mot de passe</label>
-                    </span>
-                </div>
+
+            <input
+              type="text"
+              class="form-control"
+              id="uname"
+              style={styleInput}
+              placeholder="Prenom"
+              name="prenom"
+              onChange={(e) => formAjout(e)}
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <PersonBoundingBox
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
             </div>
-            <div className="p-field p-col-12" style={styleMarginB}>
-                <div className="p-inputgroup" style={{ padding: '0px 50px 0px 50px' }}>
-                    <Lock color="#0D0F34" size={33} style={{ backgroundColor: '#E7F2FA', borderRadius: '4px 0px 0px 4px' }} className="p-1" />
-                    <span className="p-float-label">
-                        <Password className="p-inputtext  " name="confmdp_prof" style={styleInput} />
-                        <label htmlFor="inputtext" style={{ color: '#EEEFEF', fontSize: '0.8em' }} >Confimer le mot de passe</label>
-                    </span>
-                </div>
+
+            <input
+              type="text"
+              class="form-control"
+              id="uname"
+              style={styleInput}
+              placeholder="votre numero de telephone"
+              name="num_tel"
+              onChange={(e) => formAjout(e)}
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <BarChartSteps
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
             </div>
-            <div class="col-12" >
-                <center>
-                    <input type="button" class="button button2" value="Inscrire" />
-                </center>
+            <select
+              className="form-select"
+              name="role"
+              onChange={(e) => formAjout(e)}
+              style={styleInput}
+              aria-label="Default select exemple"
+            >
+              <option selected>choisir role</option>
+              {typeRole.map((role) => (
+                <option value={role.name}>{role.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <Lock
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
             </div>
+
+            <input
+              type="password"
+              class="form-control form-control-sm"
+              style={styleInput}
+              id="pwd"
+              placeholder="Votre mot de passe"
+              name="mdp"
+              onChange={(e) => formAjout(e)}
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group" style={{ paddingBottom: "18px" }}>
+          <div class="input-group">
+            <div className="input-group-addon">
+              <Lock
+                color="#0D0F34"
+                size={33}
+                style={{
+                  backgroundColor: "#E7F2FA",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+                className="p-1"
+              />
+            </div>
+
+            <input
+              type="password"
+              class="form-control form-control-sm"
+              style={styleInput}
+              id="pwd"
+              placeholder="confirmer ici votre mot de passe"
+              name="confmdp"
+              onChange={(e) => formAjout(e)}
+              required
+            />
+          
+          </div>
+          <div style={{color:"red",fontSize:"12px"}}>{error.msg}</div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          S'inscrire
+        </button>
+      </form>
+    </div>
 
         </div>
     );

@@ -87,7 +87,7 @@ function Etudiant() {
             const response = await axios.post(
                           "http://127.0.0.1:5000/etudiant/add",donneAjout
                       );
-          
+          console.log(response);
           } catch (error) {
             console.log(error.response);
           }
