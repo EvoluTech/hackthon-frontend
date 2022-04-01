@@ -4,6 +4,8 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 import React, { useState, useRef } from 'react';
 import { Navbar, Nav, Form } from 'react-bootstrap';
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { OverlayPanel } from 'primereact/overlaypanel';
@@ -20,7 +22,12 @@ export default function Header(props) {
     const [Compte, setCompte] = useState("Compte");
     const histor = useHistory();
     const profil = useRef(null);
-
+    const footer = (
+        <span>
+            <Button label="Save" icon="pi pi-check" />
+            <Button label="Cancel" icon="pi pi-times" className="p-button-secondary ml-2" />
+        </span>
+    );
 
     const styleheader = {
         fontSize: '1.14em',
@@ -164,14 +171,16 @@ export default function Header(props) {
                             <br/>
                             <Profil  titre='Modification Profil' />
                             <label className="ml-3" style={{ cursor: 'pointer'}}><spam style={{fontSize:'1em'}}><b>RASOLONDRAIBE Tamby Arimisa</b></spam></label>
-                            <Nav.Link data-toggle="tooltip" title="Votre profil" onClick={(e) => profil.current.toggle(e)}>
-
-<PersonCircle color="white" size={35} className="p-1" />
-</Nav.Link>
                         </center>
                     </div>
                     <div className="col-12 md:col-6 lg:col-12 " style={repere1}>
+                    <div>
 
+            <Card title="Advanced Card" subTitle="Subtitle" style={{ width: '350px' }} footer={footer}>
+                <p className="m-0" style={{lineHeight: '1.5'}}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                    quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </Card>
+        </div>
                     </div>
                     <div className="col-12 md:col-6 lg:col-12 " style={repere1}>
 

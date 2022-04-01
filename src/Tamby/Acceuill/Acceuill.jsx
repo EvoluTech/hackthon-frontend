@@ -14,9 +14,14 @@ import CreerPub from '../Groupe/CreerPub'
 import Conversation from '../Chat/Conversation'
 import Liste from '../Groupe/Liste'
 import { ChatLeftDots } from "react-bootstrap-icons";
-export default function Acceuill() {
+import axios from "axios";
 
+export default function Acceuill() {
+    const [listGroup, setlistGroup] = useState([]);
+    const [listProf, setlistProfOnline] = useState([]);
+    const [listPubl, setlistPublication] = useState([]);
     const [cssNA, setcssNA] = useState({ filter: 'opacity(80%)', height: '530px' });
+    const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY0ODU4OTYwOSwianRpIjoiMjkzZjUwMGYtOGYxMC00OWRhLTkzNWItZDE2YjMyNzZhMGE2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6W3sibnVtX21hdHJpY3VsZSI6MzMxNSwibm9tIjoiZWRkeSIsInByZW5vbSI6InRzYWxhbWEiLCJuaXZlYXUiOiJNMSIsInBhcmNvdXJzIjoiTTJJIiwibWRwIjoiJDJiJDEyJGFXNW9ML1Y5a0U3cjRudFFEUERDc3V0bGRnN3pDbUZ2Vlpzd1BKbC9Ob05aVkh4Y3UvbEYuIiwic3RhdHUiOiIwIn1dLCJuYmYiOjE2NDg1ODk2MDksImV4cCI6MTY0ODg0ODgwOX0.xs93OPWIhpKCJWG3DgUv2qba5IDwKJUGkBOp7xR1IkM';
     const stylefont = {
         fontSize: '0.8rem',
         fontWeight: 'normal',
@@ -24,11 +29,46 @@ export default function Acceuill() {
         fontFamily: "apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
     };
 
+    useEffect(() => {
+        axios.get('http://127.0.0.1:5000/groupe/list', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                const list = res.data.groupe;
+                // console.log(res.data.groupe) ;
+                setlistGroup({ list });
+            });
+        axios.get(' http://127.0.0.1:5000/online/professeur', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                const list = res.data.professeur;
+                setlistProfOnline({ list })
+            });
+        axios.get(' http://127.0.0.1:5000/accueil/publication', {
+            headers: {
+                'Authorization' : `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                const list = res.data.publication;
+                setlistPublication({ list })
+            })
+    }, []);
 
+    useEffect(() => {
+        
+    })
+
+    // console.log(listGroup);
     const radiusA = {
         borderRadius: '50px',
         marginBottom: '3px',
-        height:'42px'
+        height: '42px'
     }
 
     const styleA = {
@@ -49,8 +89,8 @@ export default function Acceuill() {
     }
     const stylepub1 = {
         float: 'left',
-        backgroundColor:'white',
-        borderRadius:'10px'
+        backgroundColor: 'white',
+        borderRadius: '10px'
         // border: '1px solid red'
     }
     const stylepub0 = {
@@ -82,6 +122,7 @@ export default function Acceuill() {
         float: 'right',
         width: '200px',
     }
+
     return (
         <div>
             <Header active='Home' />
@@ -111,22 +152,25 @@ export default function Acceuill() {
                         <div class="col-3 " >
                             <div class="grid m-1">
                                 <div class="col-12 " style={styleA}>
-                                        <h5>Liste des groupes </h5>
-                                        <hr/>
+                                    <h5>Liste des groupes </h5>
+                                    <hr />
                                 </div>
-                                <div class="col-12 " style={{backgroundColor:'#F9F9F9',borderRadius:'10px',opacity:'100%'}}>
+                                <div class="col-12 " style={{ backgroundColor: '#F9F9F9', borderRadius: '10px', opacity: '100%' }}>
                                     <div className="scrollpanel-demo">
                                         <ScrollPanel style={cssNA} className="custombar1">
                                             <ListGroup variant="flush" style={stylefont}  >
-                                                <ListGroup.Item action style={radiusA}>
+                                                {/* <ListGroup.Item action style={radiusA}>
                                                     <Liste logoEM={logoEM} idGroupe={'1'} nomGroupe={'EMIFI (Emit Mikalo Fiderana)'} chefGroupe={'Tamby Arimisa (M1 DA2I)'} tuteur={'YVON Mentanasoa'} />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Liste idGroupe={'2'} logoEM={logoEM} nomGroupe={'EMIKI (Emit Milalao Kitra)'} chefGroupe={'Tamby Arimisa (M1 DA2I)'} tuteur={'YVON Mentanasoa'} />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Liste idGroupe={'3'} logoEM={logoEM} nomGroupe={'EMIBA (Emit Milalao Baolina)'} chefGroupe={'Tamby Arimisa (M1 DA2I)'} tuteur={'YVON Mentanasoa'} />
-                                                </ListGroup.Item>
+                                                </ListGroup.Item> */}
+                                                {
+                                                    // console.log(listGroup.list)
+                                                listGroup.list?.map((data,index) =>(
+                                                    <ListGroup.Item action key={index} style={radiusA}>
+                                                        <Liste logoEM={logoEM} idGroupe={data.idgroup} nomGroupe={data.nom_groupe} chefGroupe={data.nom_chef_groupe+' '+data.prenom_chef_groupe} tuteur={data.nom_tuteur+' '+data.prenom_tuteur} />
+                                                    </ListGroup.Item>
+                                                )
+                                                )
+                                                }
                                             </ListGroup>
                                             <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
                                         </ScrollPanel>
@@ -141,55 +185,26 @@ export default function Acceuill() {
                                         <CreerPub />
                                     </center>
                                 </div>
-                                <div class="col-12 mb-1 ml-5 "  style={{backgroundColor:'#F0F0F1',borderRadius:'10px',width:'90%'}}>
+                                <div class="col-12 mb-1 ml-5 " style={{ backgroundColor: '#F0F0F1', borderRadius: '10px', width: '90%' }}>
                                     <center>
                                         <div className="scrollpanel-demo">
                                             <ScrollPanel style={cssNA} className="custombar1">
                                                 <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                    {
+                                                    listPubl.list?.map((data, index) => (
                                                     <div class="col-12 " style={stylepub0} >
                                                         <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
                                                         <br />
                                                         <hr style={{ paddingT: '2px' }} />
-                                                        <div style={{ padding:"5px 10px 10px 10px", float: 'left', fontSize: '0.9em',textAlign: 'left' }}> A publié à propos de : <b><i>{'Description'} qsdfsfsdkfklsdjfjsdljf kljsdk fjlsdjfjl sdjlfjlsdjf jsdljfljjkl hklsdhkfhjsdhjf khjdklshf kjhsdjkhfklsdhkfhlksdhkfhsd klhfksdjfhjksdhkfhsdkkjhdksfklsdhjlfk l hdklfjklsdhf</i></b> </div>
+                                                        <div style={{ padding: "5px 10px 10px 10px", float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description_pub}</i></b> </div>
                                                         <div  >
-                                                            Image ou Text
+                                                            {data.contenu_pub}
                                                         </div>
                                                     </div>
+                                                    ))
+                                                    }
                                                 </div>
-                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
-                                                    <div class="col-12 " style={stylepub0} >
-                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
-                                                        <br />
-                                                        <hr style={{ paddingT: '2px' }} />
-                                                        <div style={{ padding:"5px 10px 10px 10px", float: 'left', fontSize: '0.9em',textAlign: 'left' }}> A publié à propos de : <b><i>{'Description'} qsdfsfsdkfklsdjfjsdljf kljsdk fjlsdjfjl sdjlfjlsdjf jsdljfljjkl hklsdhkfhjsdhjf khjdklshf kjhsdjkhfklsdhkfhlksdhkfhsd klhfksdjfhjksdhkfhsdkkjhdksfklsdhjlfk l hdklfjklsdhf</i></b> </div>
-                                                        <div  >
-                                                            Image ou Text
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
-                                                    <div class="col-12 " style={stylepub0} >
-                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
-                                                        <br />
-                                                        <hr style={{ paddingT: '2px' }} />
-                                                        <div style={{ padding:"5px 10px 10px 10px", float: 'left', fontSize: '0.9em',textAlign: 'left' }}> A publié à propos de : <b><i>{'Description'} qsdfsfsdkfklsdjfjsdljf kljsdk fjlsdjfjl sdjlfjlsdjf jsdljfljjkl hklsdhkfhjsdhjf khjdklshf kjhsdjkhfklsdhkfhlksdhkfhsd klhfksdjfhjksdhkfhsdkkjhdksfklsdhjlfk l hdklfjklsdhf</i></b> </div>
-                                                        <div  >
-                                                            Image ou Text
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
-                                                    <div class="col-12 " style={stylepub0} >
-                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
-                                                        <br />
-                                                        <hr style={{ paddingT: '2px' }} />
-                                                        <div style={{ padding:"5px 10px 10px 10px", float: 'left', fontSize: '0.9em',textAlign: 'left' }}> A publié à propos de : <b><i>{'Description'} qsdfsfsdkfklsdjfjsdljf kljsdk fjlsdjfjl sdjlfjlsdjf jsdljfljjkl hklsdhkfhjsdhjf khjdklshf kjhsdjkhfklsdhkfhlksdhkfhsd klhfksdjfhjksdhkfhsdkkjhdksfklsdhjlfk l hdklfjklsdhf</i></b> </div>
-                                                        <div  >
-                                                            Image ou Text
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                             
+
                                                 <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
                                             </ScrollPanel>
                                         </div>
@@ -200,58 +215,20 @@ export default function Acceuill() {
                         <div class="col-3 " >
                             <div class="grid m-1">
                                 <div class="col-12 " style={styleA}>
-                                        <h5>Discussion </h5>
-                                        <hr/>
+                                    <h5>Discussion </h5>
+                                    <hr />
                                 </div>
-                                <div class="col-12 " style={{backgroundColor:'#F9F9F9',borderRadius:'10px',opacity:'100%'}}>
+                                <div class="col-12 " style={{ backgroundColor: '#F9F9F9', borderRadius: '10px', opacity: '100%' }}>
                                     <div className="scrollpanel-demo">
                                         <ScrollPanel style={cssNA} className="custombar1">
-                                            <ListGroup variant="flush" style={stylefont}  >
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='RASOLONDRAIBE' prenom='Tamby Arimisa' role='Enseignant' />
+                                            <ListGroup variant="flush" style={stylefont} >
+                                            {
+                                                listProf.list?.map((data, index) => (
+                                                <ListGroup.Item action key={index} style={radiusA}>
+                                                    <Conversation photoProfil={photoProfil} nom={data.nom} prenom={data.prenom} role={data.role} />
                                                 </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='CHAN LEE ' prenom='Karene' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='TAHINDRAZA' prenom='Eleo Antroine' role='Directeur' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='RATOVONATENAINA' prenom='Clairio Francil' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='EDDY' prenom='Tsalama' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='RASOLONDRAIBE' prenom='Tamby Arimisa' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='CHAN LEE ' prenom='Karene' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='TAHINDRAZA' prenom='Eleo Antroine' role='Directeur' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='RATOVONATENAINA' prenom='Clairio Francil' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='EDDY' prenom='Tsalama' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='RASOLONDRAIBE' prenom='Tamby Arimisa' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='CHAN LEE ' prenom='Karene' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='TAHINDRAZA' prenom='Eleo Antroine' role='Directeur' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='RATOVONATENAINA' prenom='Clairio Francil' role='Enseignant' />
-                                                </ListGroup.Item>
-                                                <ListGroup.Item action style={radiusA}>
-                                                    <Conversation photoProfil={photoProfil} nom='EDDY' prenom='Tsalama' role='Enseignant' />
-                                                </ListGroup.Item>
+                                                ))
+                                            }
                                             </ListGroup>
                                             <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
                                         </ScrollPanel>
