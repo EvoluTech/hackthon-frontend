@@ -18,11 +18,13 @@ import axios from "axios";
 
 export default function Acceuill() {
     const [listGroup, setlistGroup] = useState([]);
+    const [mis, setmis] = useState(0);
+
     const [listProf, setlistProfOnline] = useState([]);
     const [listPubl, setlistPublication] = useState([]);
-    const [user, setuser] = useState({id:''});
+    const [user, setuser] = useState({ id: '' });
     const token = localStorage.getItem("token");
-    
+
     const [cssNA, setcssNA] = useState({ filter: 'opacity(80%)', height: '530px' });
     const stylefont = {
         fontSize: '0.8rem',
@@ -30,22 +32,27 @@ export default function Acceuill() {
         // backgroundColor:'grey',
         fontFamily: "apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji"
     };
-  
+
     function decode() {
-     if (token) {   var base64Url = token.split(".")[1];
-        var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        var jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split("")
-            .map(function (c) {
-              return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join("")
-        );
-        
-        return JSON.parse(jsonPayload);}
+        if (token) {
+            var base64Url = token.split(".")[1];
+            var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+            var jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split("")
+                    .map(function (c) {
+                        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+                    })
+                    .join("")
+            );
+
+            return JSON.parse(jsonPayload);
+        }
     }
     useEffect(() => {
+        const profile = decode(token);
+        setuser({ id: profile.sub[0].num_matricule });
+        console.log(profile.sub[0]);
         axios.get('http://127.0.0.1:5000/groupe/list', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -65,23 +72,29 @@ export default function Acceuill() {
                 const list = res.data.professeur;
                 setlistProfOnline({ list })
             });
-        axios.get(' http://127.0.0.1:5000/accueil/publication', {
+
+
+    }, []);
+    useEffect(() => {
+        const profile = decode(token);
+
+        setmis(0)
+        const cible = profile.sub[0].niveau + '' + profile.sub[0].parcours;
+        axios.get(`http://127.0.0.1:5000/accueil/publication/${cible}`, {
             headers: {
-                'Authorization' : `Bearer ${token}`
+                'Authorization': `Bearer ${token}`
             }
         })
             .then(res => {
-                const list = res.data.publication;
-                setlistPublication({ list })
+                console.log(res)
+                const lista = res.data.publicationEtu;
+                const listb = res.data.publicationProf;
+                const listc = res.data.publicationGroup;
+                setlistPublication({ list: lista, list2: listb, list3: listc })
             })
 
-        const profile = decode(token);
-        setuser({id:profile.sub[0].num_matricule})
-    }, []);
+    }, [mis]);
 
-    useEffect(() => {
-        
-    })
 
     // console.log(listGroup);
     const radiusA = {
@@ -183,12 +196,12 @@ export default function Acceuill() {
                                                 </ListGroup.Item> */}
                                                 {
                                                     // console.log(listGroup.list)
-                                                listGroup.list?.map((data,index) =>(
-                                                    <ListGroup.Item action key={index} style={radiusA}>
-                                                        <Liste logoEM={logoEM} idGroupe={data.idgroup} nomGroupe={data.nom_groupe} chefGroupe={data.nom_chef_groupe+' '+data.prenom_chef_groupe} tuteur={data.nom_tuteur+' '+data.prenom_tuteur} />
-                                                    </ListGroup.Item>
-                                                )
-                                                )
+                                                    listGroup.list?.map((data, index) => (
+                                                        <ListGroup.Item action key={index} style={radiusA}>
+                                                            <Liste logoEM={logoEM} idGroupe={data.idgroup} nomGroupe={data.nom_groupe} chefGroupe={data.nom_chef_groupe + ' ' + data.prenom_chef_groupe} tuteur={data.nom_tuteur + ' ' + data.prenom_tuteur} />
+                                                        </ListGroup.Item>
+                                                    )
+                                                    )
                                                 }
                                             </ListGroup>
                                             <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
@@ -201,39 +214,85 @@ export default function Acceuill() {
                             <div class="grid m-1">
                                 <div class="col-12 mb-1" >
                                     <center>
-                                        <CreerPub />
+                                        <CreerPub setmiss={setmis} />
                                     </center>
                                 </div>
                                 <div class="col-12 mb-1 ml-5 " style={{ backgroundColor: '#F0F0F1', borderRadius: '10px', width: '90%' }}>
                                     <center>
                                         <div className="scrollpanel-demo">
                                             <ScrollPanel style={cssNA} className="custombar1">
-                                            {
-                                                    listPubl.list?.map((data, index) => (
-                                            <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
-                                                    <div class="col-12 " style={stylepub0} >
+                                                {
+                                                    listPubl.list2?.map((data, index) => (
                                                         <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
-                                                            <div class="col-12 " style={{ float: 'left' }}>
-                                                                <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} />  Tamby Arimisa</b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : 30 mars 2022 </label></label>
-                                                                <br />
-                                                                <hr style={{ paddingT: '1px' }} />
-                                                            </div>
-                                                            <div class="col-12  " style={{ float: 'left' }}>
-                                                                <div style={{ float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description_pub}</i></b> </div>
-                                                            </div>
-                                                            <div class="col-12 mb-1 " style={{ float: 'left' }}>
-                                                                <center>
-                                                                {data.contenu_pub}
-                                                           </center>
+                                                            <div class="col-12 " style={stylepub0} >
+                                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                                    <div class="col-12 " style={{ float: 'left' }}>
+                                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} /> {data.nom + ' ' + data.prenom + '(' + data.role + ')'} </b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : {data.datepub} </label></label>
+                                                                        <br />
+                                                                        <hr style={{ paddingT: '1px' }} />
+                                                                    </div>
+                                                                    <div class="col-12  " style={{ float: 'left' }}>
+                                                                        <div style={{ float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description}</i></b> </div>
+                                                                    </div>
+                                                                    <div class="col-12 mb-1 " style={{ float: 'left' }}>
+                                                                        <center>
+                                                                            {data.contenues}
+                                                                        </center>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
                                                     ))
-                                                    }
+                                                }
+                                                {
+                                                    listPubl.list?.map((data, index) => (
+                                                        <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                            <div class="col-12 " style={stylepub0} >
+                                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                                    <div class="col-12 " style={{ float: 'left' }}>
+                                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} /> {data.nom + ' ' + data.prenom + '(' + data.role + ')'} </b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : {data.datepub} </label></label>
+                                                                        <br />
+                                                                        <hr style={{ paddingT: '1px' }} />
+                                                                    </div>
+                                                                    <div class="col-12  " style={{ float: 'left' }}>
+                                                                        <div style={{ float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description}</i></b> </div>
+                                                                    </div>
+                                                                    <div class="col-12 mb-1 " style={{ float: 'left' }}>
+                                                                        <center>
+                                                                            {data.contenues}
+                                                                        </center>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                }
+                                                {
+                                                    listPubl.list3?.map((data, index) => (
+                                                        <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                            <div class="col-12 " style={stylepub0} >
+                                                                <div class="grid mb-4 p-2 ml-1" style={stylepub1}>
+                                                                    <div class="col-12 " style={{ float: 'left' }}>
+                                                                        <label style={styleC} > <b ><img alt="Profil" src={photoProfil} style={{ borderRadius: '50%', width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '2px' }} /> {data.nom + ' ' + '(' + 'Groupe' + ')'} </b> <label style={sytleFontDatePub}> , <u>date de la publication</u> : {data.datepub} </label></label>
+                                                                        <br />
+                                                                        <hr style={{ paddingT: '1px' }} />
+                                                                    </div>
+                                                                    <div class="col-12  " style={{ float: 'left' }}>
+                                                                        <div style={{ float: 'left', fontSize: '0.9em', textAlign: 'left' }}> A publié à propos de : <b><i>{data.description}</i></b> </div>
+                                                                    </div>
+                                                                    <div class="col-12 mb-1 " style={{ float: 'left' }}>
+                                                                        <center>
+                                                                            {data.contenues}
+                                                                        </center>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                }
                                                 <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
                                             </ScrollPanel>
-                                                    
+
                                         </div>
                                     </center>
                                 </div>
@@ -249,13 +308,13 @@ export default function Acceuill() {
                                     <div className="scrollpanel-demo">
                                         <ScrollPanel style={cssNA} className="custombar1">
                                             <ListGroup variant="flush" style={stylefont} >
-                                            {
-                                                listProf.list?.map((data, index) => (
-                                                <ListGroup.Item action key={index} style={radiusA}>
-                                                    <Conversation monId={user.id} idPers={data.code_prof} photoProfil={photoProfil} nom={data.nom} prenom={data.prenom} role={data.role} />
-                                                </ListGroup.Item>
-                                                ))
-                                            }
+                                                {
+                                                    listProf.list?.map((data, index) => (
+                                                        <ListGroup.Item action key={index} style={radiusA}>
+                                                            <Conversation monId={user.id} idPers={data.code_prof} photoProfil={photoProfil} nom={data.nom} prenom={data.prenom} role={data.role} />
+                                                        </ListGroup.Item>
+                                                    ))
+                                                }
                                             </ListGroup>
                                             <ScrollTop target="parent" threshold={100} className="custom-scrolltop" icon="pi pi-sort-up" />
                                         </ScrollPanel>

@@ -41,7 +41,7 @@ function Etudiant() {
     setdonneAjout(ds);
   };
 
-  const typeParcours = [{ name: "DA21" }, { name: "AES" }, { name: "RPM" }];
+  const typeParcours = [{ name: "DA2I" }, { name: "AES" }, { name: "RPM" }];
   const typeNiveau = [
     { name: "L1" },
     { name: "L2" },

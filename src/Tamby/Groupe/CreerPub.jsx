@@ -43,6 +43,7 @@ const CreerPub = (props) => {
                 // const list = res.data.groupe;
                 // console.log(res.data.groupe) ;
                 // setlistGroup({ list });
+                props.setmiss(1)
                 console.log(res);
             }).catch(error => {
                 console.log(error);
@@ -116,6 +117,8 @@ const CreerPub = (props) => {
         return (
             <div>
                 <Button label="Fermer" icon="pi pi-times" onClick={() => onHide(name)} className="p-button-text" />
+                <Button label="Publier" className="p-button-primary" icon="pi pi-send" style={stylebtnEnrg} iconPos="right" onClick={()=>
+                        {creepub();onHide(name)}}/>
 
             </div>
         );
@@ -183,7 +186,7 @@ const CreerPub = (props) => {
                                     }
                                 }}>
                                 <option value="">Cible de la plublication...</option>
-                                <option value="tous">Pour tous le monde</option>
+                                <option value="Tous">Pour tous le monde</option>
                                 <option value="prof">Pour tous les profs (Seulement)</option>
                                 <option value="M2">Pour M2 </option>
                                 <option value="M1">Pour M1 </option>
@@ -200,8 +203,8 @@ const CreerPub = (props) => {
                                         setdonneAjout({ ...donneAjout, cible: cibelNon + '' + e.target.value })
                                     }}>
                                     <option value="">Choisir le parcours...</option>
-                                    <option value="tous">Tous</option>
-                                    <option value="DASI">Pour DASI </option>
+                                    <option value="Tous">Tous</option>
+                                    <option value="DA2I">Pour DA2I </option>
                                     <option value="AES">Pour AES </option>
                                     <option value="RPM">Pour RPM </option>
 
@@ -211,8 +214,7 @@ const CreerPub = (props) => {
                             null
                         }
                     </Form>
-                    <Button label="Publier" className="p-button-primary" icon="pi pi-send" style={stylebtnEnrg} iconPos="right" onClick={()=>
-                        {creepub()}}/>
+                    
                 </div>
             </Dialog>
         </Fragment >
