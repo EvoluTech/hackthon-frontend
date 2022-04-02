@@ -187,10 +187,10 @@ export default function Groupe(props) {
                                 <div class="col-12 " style={{ backgroundColor: '#F9F9F9', borderRadius: '10px', opacity: '100%' }}>
                                     <div className="scrollpanel-demo">
                                         <label className="pl-2 pr-1" style={{ cursor: 'pointer', fontSize: '0.9em' }}>
-                                            Parraigné par   : <b>{Location.state.nomChefGroupe}</b>
+                                            Parraigné par   : <b>{Location.state.tuteurGroupe}</b>
                                         </label> <br />
                                         <label className="pl-2 pr-3" style={{ cursor: 'pointer', fontSize: '0.9em' }}>
-                                            Chef de groupe: <b>{Location.state.tuteurGroupe}</b>
+                                            Chef de groupe: <b>{Location.state.nomChefGroupe}</b>
                                         </label>
                                     </div>
                                 </div>

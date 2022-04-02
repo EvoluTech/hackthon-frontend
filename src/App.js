@@ -6,6 +6,7 @@ import Inscription from './Tamby/Login/Inscription/Inscription'
 import Acceuil from './Tamby/Acceuill/Acceuill'
 import Chat from './Tamby/Chat/Chat'
 import Groupe from './Tamby/Groupe/Groupe'
+import ListGroupe from './Tamby/Groupe/ListGroupe'
 import { useEffect, useState } from 'react';
 function App() {
  const [logged,setlogged] = useState(false);
@@ -31,6 +32,7 @@ const token = localStorage.getItem("token");
      <Route exact path="/Chat" component={Chat}></Route> 
      <Route exact path="/Groupe" component={Groupe}></Route> 
      <Route exact path="/" component={Login}></Route>
+    <Route exact path="/ListGroupe" component={ListGroupe}></Route>
     <Route exact path="/ListGroupe/Groupe" component={Groupe}></Route>
         <Route exact path="/inscription" component={Inscription}></Route>
       </Router>

@@ -139,7 +139,7 @@ export default function Header(props) {
                                 </Nav.Link>
                                 <Nav.Link className="mr-5" onClick={() => {
                                     histor.push({
-                                        pathname: '/Groupe'
+                                        pathname: '/ListGroupe'
                                     })
                                 }}>
                                     {Groupes == 'active' ?
